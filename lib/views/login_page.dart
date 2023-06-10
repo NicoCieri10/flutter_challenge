@@ -1,13 +1,120 @@
 import 'package:flutter/material.dart';
 
+import 'package:appsize/appsize.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import 'package:flutter_challenge/providers/login_form_provider.dart';
+import 'package:flutter_challenge/theme/theme.dart';
+import 'package:flutter_challenge/widgets/widgets.dart';
+
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
+
+  static const name = 'login';
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('LoginPage'),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+      child: Scaffold(
+        backgroundColor: myThemeLight.scaffoldBackgroundColor,
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                CardContainer(
+                  Column(
+                    children: [
+                      Text(
+                        'Bienvenido',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      SizedBox(height: 20.sp),
+                      ChangeNotifierProvider(
+                        create: (_) => LoginFormProvider(),
+                        child: const LoginForm(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LoginForm extends StatelessWidget {
+  const LoginForm({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final loginForm = Provider.of<LoginFormProvider>(context);
+
+    return Form(
+      // TODO: fijar tamaño on error
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      key: loginForm.formKey,
+      child: Column(
+        children: [
+          CustomTextField(
+            hint: 'usuario',
+            label: 'Usuario',
+            keyboardType: TextInputType.text,
+            onChanged: (value) => loginForm.user = value,
+            height: 50.sp,
+            width: 230.sp,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Ingrese su usuario';
+              }
+              return null;
+            },
+            icon: Icon(
+              Icons.person,
+              size: 22.sp,
+              color: myThemeLight.primaryColor,
+            ),
+          ),
+          SizedBox(height: 20.sp),
+          CustomTextField(
+            hint: '********',
+            label: 'Contraseña',
+            keyboardType: TextInputType.visiblePassword,
+            obscure: true,
+            onChanged: (value) => loginForm.password = value,
+            height: 50.sp,
+            width: 230.sp,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Ingrese su contraseña';
+              }
+              return null;
+            },
+            icon: Icon(
+              Icons.lock,
+              size: 20.sp,
+              color: myThemeLight.primaryColor,
+            ),
+          ),
+          SizedBox(height: 30.sp),
+          CustomButton(
+            text: loginForm.isLoading ? 'Espere...' : 'Ingresar',
+            onPressed: loginForm.isLoading
+                ? null
+                : () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+
+                    if (!loginForm.isValidForm()) return;
+                    loginForm.isLoading = true;
+
+                    context.pushReplacementNamed('home');
+                  },
+          ),
+        ],
       ),
     );
   }

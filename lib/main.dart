@@ -17,6 +17,7 @@ class App extends StatelessWidget {
         systemNavigationBarColor: myThemeLight.primaryColor,
         systemNavigationBarIconBrightness: Brightness.light,
         statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
       ),
     );
 

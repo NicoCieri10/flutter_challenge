@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 final myThemeLight = ThemeData.light().copyWith(
-  primaryColor: Colors.blue[800],
-  hintColor: Colors.blue[900],
-  scaffoldBackgroundColor: const Color.fromARGB(255, 246, 246, 246),
-  appBarTheme: AppBarTheme(
+  primaryColor: const Color(0xff9e007e),
+  // hintColor: Colors.blue[900],
+  scaffoldBackgroundColor: const Color.fromARGB(255, 246, 235, 244),
+  appBarTheme: const AppBarTheme(
     elevation: 10,
-    color: Colors.blue[800],
+    color: Color(0xff9e007e),
   ),
-  floatingActionButtonTheme: FloatingActionButtonThemeData(
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
     elevation: 10,
-    backgroundColor: Colors.blue[800],
+    backgroundColor: Color(0xff9e007e),
   ),
 );
 
