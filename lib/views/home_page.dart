@@ -26,6 +26,7 @@ class HomePage extends StatelessWidget {
         title: const Text('Flutter Challenge 2023'),
       ),
       body: GestureDetector(
+        // TODO: pull to refresh
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Padding(
           padding: EdgeInsets.only(
