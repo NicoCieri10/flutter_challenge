@@ -1,4 +1,5 @@
 import 'package:appsize/appsize.dart';
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_challenge/models/models.dart';
 
@@ -61,6 +62,9 @@ class ProductTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final priceMask = MoneyMaskedTextController(leftSymbol: 'USD');
+    priceMask.updateValue(product.price.toDouble());
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,10 +88,12 @@ class ProductTitle extends StatelessWidget {
             ),
           ],
         ),
-        // TODO: máscara de USD?
         Text(
-          'USD${product.price}',
-          style: Theme.of(context).textTheme.titleLarge,
+          priceMask.text,
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:appsize/appsize.dart';
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -109,13 +110,16 @@ class ProductPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final priceMask = MoneyMaskedTextController(leftSymbol: 'USD');
+    priceMask.updateValue(product.price.toDouble());
+
     return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(
         horizontal: 20.sp,
       ),
       child: Text(
-        'USD${product.price}',
+        priceMask.text,
         style: TextStyle(
           fontSize: 20.sp,
           fontWeight: FontWeight.bold,

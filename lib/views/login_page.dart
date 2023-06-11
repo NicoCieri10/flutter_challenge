@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:appsize/appsize.dart';
+import 'package:flutter_challenge/services/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -52,6 +53,7 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormProvider>(context);
+    final productsService = Provider.of<ProductsService>(context);
 
     return Form(
       // TODO: fijar tamaño on error
@@ -104,12 +106,19 @@ class LoginForm extends StatelessWidget {
             text: loginForm.isLoading ? 'Espere...' : 'Ingresar',
             onPressed: loginForm.isLoading
                 ? null
-                : () {
+                : () async {
+                    // TODO: manejar login
                     FocusScope.of(context).requestFocus(FocusNode());
+                    final bool login = await productsService.loginUser(
+                      loginForm.user,
+                      loginForm.password,
+                    );
 
-                    if (!loginForm.isValidForm()) return;
+                    if (!loginForm.isValidForm() || !login) return;
                     loginForm.isLoading = true;
 
+                    // ignore: use_build_context_synchronously
+                    if (!context.mounted) return;
                     context.pushReplacementNamed('home');
                   },
           ),

@@ -47,4 +47,35 @@ class ProductsService extends ChangeNotifier {
       return [];
     }
   }
+
+  Future<bool> loginUser(
+    String user,
+    String password,
+  ) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final url = Uri.https(_baseUrl, '/auth/login');
+      // final response = await http.post(
+      //   url,
+      //   body: {'user': user, 'password': password},
+      // );
+
+      // log('login: ${response.statusCode}');
+
+      if (user != 'kminchelle' || password != '0lelplR') return false;
+
+      isLoading = false;
+      notifyListeners();
+
+      return true;
+    } catch (e) {
+      isLoading = false;
+      notifyListeners();
+
+      log(e.toString());
+      return false;
+    }
+  }
 }

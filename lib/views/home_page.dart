@@ -1,5 +1,6 @@
 import 'package:appsize/appsize.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_challenge/providers/home_page_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +18,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsService = Provider.of<ProductsService>(context);
-    final List<Product> products = productsService.products;
 
     if (productsService.isLoading) return const LoadingPage();
 
@@ -25,14 +25,22 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Flutter Challenge 2023'),
       ),
-      body: GestureDetector(
-        // TODO: pull to refresh
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 20.sp,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await productsService.loadProducts();
+        },
+        color: myThemeLight.primaryColor,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: 20.sp,
+            ),
+            child: ChangeNotifierProvider(
+              create: (_) => HomePageProvider(),
+              child: const HomeView(),
+            ),
           ),
-          child: HomeView(products),
         ),
       ),
     );
@@ -40,12 +48,21 @@ class HomePage extends StatelessWidget {
 }
 
 class HomeView extends StatelessWidget {
-  const HomeView(this.products, {super.key});
-
-  final List<Product> products;
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final productsService = Provider.of<ProductsService>(context);
+    final homeProvider = Provider.of<HomePageProvider>(context);
+
+    List<Product> products = productsService.products;
+
+    products = products.where((product) {
+      return product.title
+          .toLowerCase()
+          .contains(homeProvider.search.toLowerCase());
+    }).toList();
+
     return Column(
       children: [
         const SearchBar(),
@@ -64,20 +81,29 @@ class ProductsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsService = Provider.of<ProductsService>(context);
+    final homeProvider = Provider.of<HomePageProvider>(context);
 
     return Expanded(
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) => GestureDetector(
-          onTap: () {
-            productsService.selectedProduct = products[index];
-            context.pushNamed('product');
-          },
-          child: ProductItem(
-            products[index],
-          ),
-        ),
-        itemCount: products.length,
-      ),
+      child: products.isEmpty
+          ? SizedBox(
+              width: double.infinity,
+              child: Text(
+                'No se encontraron resultados para ${homeProvider.search}',
+                textAlign: TextAlign.center,
+              ),
+            )
+          : ListView.builder(
+              itemBuilder: (BuildContext context, int index) => GestureDetector(
+                onTap: () {
+                  productsService.selectedProduct = products[index];
+                  context.pushNamed('product');
+                },
+                child: ProductItem(
+                  products[index],
+                ),
+              ),
+              itemCount: products.length,
+            ),
     );
   }
 }
@@ -87,7 +113,7 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchController = TextEditingController();
+    final homeProvider = Provider.of<HomePageProvider>(context);
 
     final focusedBorderStyle = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.sp),
@@ -100,8 +126,11 @@ class SearchBar extends StatelessWidget {
       height: 50.sp,
       width: 300.sp,
       child: TextField(
-        onChanged: (value) {},
-        controller: searchController,
+        onChanged: (value) {
+          // TODO: buscar con feth o en lista?
+          homeProvider.search = value;
+        },
+        controller: homeProvider.searchEditingController(),
         decoration: InputDecoration(
           hintText: 'Buscar producto',
           hintStyle: TextStyle(fontSize: 14.sp),
