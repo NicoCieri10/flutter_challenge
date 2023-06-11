@@ -4,7 +4,7 @@ import 'package:appsize/appsize.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_challenge/providers/login_form_provider.dart';
+import 'package:flutter_challenge/providers/providers.dart';
 import 'package:flutter_challenge/theme/theme.dart';
 import 'package:flutter_challenge/widgets/widgets.dart';
 
@@ -18,7 +18,6 @@ class LoginPage extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        backgroundColor: myThemeLight.scaffoldBackgroundColor,
         body: Center(
           child: SingleChildScrollView(
             child: Column(

@@ -8,7 +8,7 @@ class Product {
   int id;
   String title;
   String description;
-  double price;
+  int price;
   double discountPercentage;
   double rating;
   int stock;

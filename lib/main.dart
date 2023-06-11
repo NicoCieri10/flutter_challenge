@@ -1,11 +1,28 @@
 import 'package:appsize/appsize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import 'package:flutter_challenge/services/services.dart';
 import 'package:flutter_challenge/theme/theme.dart';
 import 'package:flutter_challenge/views/views.dart';
-import 'package:go_router/go_router.dart';
 
-void main() => runApp(const App());
+void main() => runApp(const AppState());
+
+class AppState extends StatelessWidget {
+  const AppState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProductsService()),
+      ],
+      child: const App(),
+    );
+  }
+}
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -36,6 +53,7 @@ class MyApp extends StatelessWidget {
       title: 'Material App',
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
+      theme: myThemeLight,
     );
   }
 
@@ -43,12 +61,12 @@ class MyApp extends StatelessWidget {
     errorBuilder: (context, state) => const RoutingErrorPage(),
     routes: <GoRoute>[
       GoRoute(
-        path: '/',
+        path: '/login',
         name: 'login',
         builder: (context, state) => const LoginPage(),
       ),
       GoRoute(
-        path: '/home',
+        path: '/',
         name: 'home',
         builder: (context, state) => const HomePage(),
       ),
