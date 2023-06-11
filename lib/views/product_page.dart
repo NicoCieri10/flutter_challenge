@@ -61,6 +61,7 @@ class ProductGallery extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
+          // TODO: load animation/progress indicator/image placeholder
           return Image.network(product.images[index]);
         },
         itemCount: product.images.length,
