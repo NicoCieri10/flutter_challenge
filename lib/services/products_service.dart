@@ -56,7 +56,7 @@ class ProductsService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final url = Uri.https(_baseUrl, '/auth/login');
+      // final url = Uri.https(_baseUrl, '/auth/login');
       // final response = await http.post(
       //   url,
       //   body: {'user': user, 'password': password},
