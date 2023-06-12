@@ -1,3 +1,4 @@
+import 'package:appsize/appsize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_challenge/theme/theme.dart';
 
@@ -9,8 +10,6 @@ class CustomTextField extends StatelessWidget {
     required this.keyboardType,
     this.obscure = false,
     this.controller,
-    this.height = 28.0,
-    this.width = 230.0,
     this.icon,
     this.validator,
     this.onChanged,
@@ -20,8 +19,6 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final TextInputType keyboardType;
   final bool obscure;
-  final double height;
-  final double width;
   final TextEditingController? controller;
   final Widget? icon;
   final String? Function(String?)? validator;
@@ -43,39 +40,34 @@ class CustomTextField extends StatelessWidget {
       ),
     );
 
-    return SizedBox(
-      height: height,
-      width: width,
-      child: TextFormField(
-        keyboardType: keyboardType,
-        obscureText: obscure,
-        style: const TextStyle(
-          fontSize: 14.0,
+    return TextFormField(
+      keyboardType: keyboardType,
+      obscureText: obscure,
+      style: TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w300,
+      ),
+      onChanged: onChanged,
+      controller: controller,
+      autocorrect: false,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 10.sp,
+          vertical: 10.sp,
+        ),
+        border: borderStyle,
+        enabledBorder: borderStyle,
+        focusedBorder: focusedBorderStyle,
+        disabledBorder: borderStyle,
+        hintText: hint,
+        hintStyle: TextStyle(
+          fontSize: 14.sp,
+          color: Colors.grey[400],
           fontWeight: FontWeight.w300,
         ),
-        onChanged: onChanged,
-        controller: controller,
-        autocorrect: false,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(
-            left: 8.0,
-            right: 8.0,
-            bottom: 2.0,
-          ),
-          border: borderStyle,
-          enabledBorder: borderStyle,
-          focusedBorder: focusedBorderStyle,
-          disabledBorder: borderStyle,
-          hintText: hint,
-          hintStyle: TextStyle(
-            fontSize: 14.0,
-            color: Colors.grey[400],
-            fontWeight: FontWeight.w300,
-          ),
-          prefixIcon: icon,
-        ),
-        validator: validator,
+        prefixIcon: icon,
       ),
+      validator: validator,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:appsize/appsize.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_challenge/models/models.dart';
+import 'package:flutter_challenge/theme/theme.dart';
 
 class ProductItem extends StatelessWidget {
   const ProductItem(this.product, {super.key});
@@ -12,12 +13,12 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: 25.sp,
+        horizontal: 20.sp,
         vertical: 10.sp,
       ),
       padding: EdgeInsets.all(20.sp),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: myThemeLight.cardColor,
         borderRadius: BorderRadius.circular(10.sp),
         boxShadow: const [
           BoxShadow(
@@ -41,6 +42,7 @@ class ItemBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ProductTitle(product: product),
         SizedBox(height: 20.sp),

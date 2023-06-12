@@ -1,10 +1,13 @@
 import 'package:appsize/appsize.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_challenge/theme/theme.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_challenge/models/product.dart';
 import 'package:flutter_challenge/services/services.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
@@ -36,18 +39,22 @@ class ProductView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ProductGallery(product: product),
-        SizedBox(height: 10.sp),
-        ProductDescription(product: product),
-        SizedBox(height: 30.sp),
-        ProductPrice(product: product)
+        Column(
+          children: [
+            ProductGallery(product: product),
+            ProductDescription(product: product),
+            ProductPrice(product: product),
+          ],
+        ),
+        const AddButton(),
       ],
     );
   }
 }
 
-class ProductGallery extends StatelessWidget {
+class ProductGallery extends StatefulWidget {
   const ProductGallery({
     super.key,
     required this.product,
@@ -56,15 +63,53 @@ class ProductGallery extends StatelessWidget {
   final Product product;
 
   @override
+  State<ProductGallery> createState() => _ProductGalleryState();
+}
+
+class _ProductGalleryState extends State<ProductGallery> {
+  late final PageController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController(initialPage: 0);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final itemCount = widget.product.images.length;
     return SizedBox(
-      height: 250.sp,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (BuildContext context, int index) {
-          return Image.network(product.images[index]);
-        },
-        itemCount: product.images.length,
+      height: 300.sp,
+      child: Column(
+        children: [
+          Expanded(
+            child: PageView.builder(
+              scrollDirection: Axis.horizontal,
+              controller: _controller,
+              itemBuilder: (BuildContext context, int index) {
+                return InteractiveViewer(
+                  child: CachedNetworkImage(
+                    imageUrl: widget.product.images[index],
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                );
+              },
+              itemCount: itemCount,
+            ),
+          ),
+          SizedBox(height: 10.sp),
+          SmoothPageIndicator(
+            controller: _controller,
+            count: itemCount,
+            effect: WormEffect(
+              dotColor: Colors.grey,
+              activeDotColor: Colors.black,
+              dotHeight: 10.sp,
+              dotWidth: 10.sp,
+            ),
+          )
+        ],
       ),
     );
   }
@@ -80,20 +125,25 @@ class ProductDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(
+    return Padding(
+      padding: EdgeInsets.symmetric(
         vertical: 10.sp,
         horizontal: 20.sp,
       ),
-      padding: EdgeInsets.all(20.sp),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(10.sp),
-      ),
-      child: Text(
-        product.description,
-        style: TextStyle(
-          fontSize: 20.sp,
+      child: RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: product.category.toLowerCase(),
+              style: myThemeLight.textTheme.headlineSmall,
+            ),
+            TextSpan(
+              text: '\n${product.description}',
+              style: myThemeLight.textTheme.titleLarge?.copyWith(
+                fontSize: 20.sp,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -123,6 +173,40 @@ class ProductPrice extends StatelessWidget {
         style: TextStyle(
           fontSize: 20.sp,
           fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+class AddButton extends StatelessWidget {
+  const AddButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(20.sp),
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(
+            myThemeLight.primaryColor,
+          ),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+            EdgeInsets.symmetric(
+              vertical: 15.sp,
+              horizontal: 40.sp,
+            ),
+          ),
+        ),
+        child: Text(
+          'Agregar al carrito',
+          style: TextStyle(
+            fontSize: 14.sp,
+          ),
         ),
       ),
     );

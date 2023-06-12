@@ -56,7 +56,6 @@ class LoginForm extends StatelessWidget {
     final productsService = Provider.of<ProductsService>(context);
 
     return Form(
-      // TODO: fijar tamaño on error
       autovalidateMode: AutovalidateMode.onUserInteraction,
       key: loginForm.formKey,
       child: Column(
@@ -66,8 +65,6 @@ class LoginForm extends StatelessWidget {
             label: 'Usuario',
             keyboardType: TextInputType.text,
             onChanged: (value) => loginForm.user = value,
-            height: 50.sp,
-            width: 230.sp,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Ingrese su usuario';
@@ -87,8 +84,6 @@ class LoginForm extends StatelessWidget {
             keyboardType: TextInputType.visiblePassword,
             obscure: true,
             onChanged: (value) => loginForm.password = value,
-            height: 50.sp,
-            width: 230.sp,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Ingrese su contraseña';
@@ -107,7 +102,6 @@ class LoginForm extends StatelessWidget {
             onPressed: loginForm.isLoading
                 ? null
                 : () async {
-                    // TODO: manejar login
                     FocusScope.of(context).requestFocus(FocusNode());
                     final bool login = await productsService.loginUser(
                       loginForm.user,

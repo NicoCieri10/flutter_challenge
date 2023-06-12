@@ -1,6 +1,6 @@
 import 'package:appsize/appsize.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_challenge/providers/home_page_provider.dart';
+import 'package:flutter_challenge/providers/providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -32,14 +32,9 @@ class HomePage extends StatelessWidget {
         color: myThemeLight.primaryColor,
         child: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: 20.sp,
-            ),
-            child: ChangeNotifierProvider(
-              create: (_) => HomePageProvider(),
-              child: const HomeView(),
-            ),
+          child: ChangeNotifierProvider(
+            create: (_) => HomePageProvider(),
+            child: const HomeView(),
           ),
         ),
       ),
@@ -65,6 +60,7 @@ class HomeView extends StatelessWidget {
 
     return Column(
       children: [
+        SizedBox(height: 20.sp),
         const SearchBar(),
         SizedBox(height: 10.sp),
         ProductsList(products),
@@ -102,6 +98,7 @@ class ProductsList extends StatelessWidget {
                   products[index],
                 ),
               ),
+              // clipBehavior: Clip.none,
               itemCount: products.length,
             ),
     );
@@ -122,12 +119,11 @@ class SearchBar extends StatelessWidget {
       ),
     );
 
-    return SizedBox(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.sp),
       height: 50.sp,
-      width: 300.sp,
       child: TextField(
         onChanged: (value) {
-          // TODO: buscar con feth o en lista?
           homeProvider.search = value;
         },
         controller: homeProvider.searchEditingController(),

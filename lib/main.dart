@@ -39,13 +39,26 @@ class App extends StatelessWidget {
     );
 
     return AppSize.child(
-      child: MyApp(),
+      child: const MyApp(),
     );
   }
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _router = createRouter;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,26 +70,27 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  final GoRouter _router = GoRouter(
-    errorBuilder: (context, state) => const RoutingErrorPage(),
-    routes: <GoRoute>[
-      GoRoute(
-        path: '/login',
-        name: 'login',
-        builder: (context, state) => const LoginPage(),
-      ),
-      GoRoute(
-        path: '/',
-        name: 'home',
-        builder: (context, state) => const HomePage(),
-      ),
-      GoRoute(
-        path: '/product',
-        name: 'product',
-        builder: (context, state) => const ProductPage(),
-      ),
-    ],
-  );
+  GoRouter get createRouter => GoRouter(
+        initialLocation: '/home',
+        errorBuilder: (context, state) => const RoutingErrorPage(),
+        routes: <GoRoute>[
+          GoRoute(
+            path: '/login',
+            name: 'login',
+            builder: (context, state) => const LoginPage(),
+          ),
+          GoRoute(
+            path: '/home',
+            name: 'home',
+            builder: (context, state) => const HomePage(),
+          ),
+          GoRoute(
+            path: '/product',
+            name: 'product',
+            builder: (context, state) => const ProductPage(),
+          ),
+        ],
+      );
 }
 
 class RoutingErrorPage extends StatelessWidget {

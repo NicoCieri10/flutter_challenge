@@ -17,7 +17,6 @@ class LoginFormProvider extends ChangeNotifier {
   }
 
   bool isValidForm() {
-    // TODO: login user and password
     return _formKey.currentState?.validate() ?? false;
   }
 }

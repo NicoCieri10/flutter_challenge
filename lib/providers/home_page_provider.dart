@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class HomePageProvider extends ChangeNotifier {
-  // TODO: fetch products from API
-
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
