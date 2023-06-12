@@ -45,6 +45,7 @@ class ProductView extends StatelessWidget {
           children: [
             ProductGallery(product: product),
             ProductDescription(product: product),
+            SizedBox(height: 30.sp),
             ProductPrice(product: product),
           ],
         ),
