@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   GoRouter get createRouter => GoRouter(
-        initialLocation: '/home',
+        initialLocation: '/login',
         errorBuilder: (context, state) => const RoutingErrorPage(),
         routes: <GoRoute>[
           GoRoute(

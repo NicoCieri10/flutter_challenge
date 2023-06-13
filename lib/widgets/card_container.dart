@@ -21,7 +21,7 @@ class CardContainer extends StatelessWidget {
 
   BoxDecoration _cardDecoration() {
     return BoxDecoration(
-      color: Colors.white54,
+      color: Colors.pink[50],
       borderRadius: BorderRadius.circular(10.sp),
       boxShadow: const [
         BoxShadow(
